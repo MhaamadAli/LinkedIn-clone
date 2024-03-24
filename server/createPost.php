@@ -2,7 +2,7 @@
 include './connection.php';
 
 $userID = $_POST['userID'];
-$companyID = isset($_POST['companyID']) ? $_POST['companyID'] : '';
+$companyID = isset($_POST['companyID']) ? $_POST['companyID'] : null;
 $content = $_POST['content'];
 $postImage = isset($_POST['postImage']) ? $_POST['postImage'] : '';
 $postedAt = isset($_POST['postedAt']) ? $_POST['postedAt'] : $postedAt = date('Y-m-d H:i:s');;
