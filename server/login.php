@@ -5,13 +5,13 @@ include './connection.php';
 $email = $_POST['email'];
 $password = $_POST['password'];
 
-$query = $mysqli ->prepare('SELECT id,username, email from users WHERE email=? and password=?');
-$query ->bind_param('ss', $email, $password);
+$query = $mysqli ->prepare('SELECT userID,username,first_name,last_name, email, password from users WHERE email=?');
+$query ->bind_param('s', $email);
 
 $query->execute();
 $query->store_result();
 
-$query->bind_result($id, $username, $email, $hashed_password);
+$query->bind_result($userID, $username,$first_name,$last_name, $email, $hashed_password);
 
 $query->fetch();
 
@@ -21,10 +21,15 @@ if ($num_rows == 0) {
     $response['message'] = "user not found";
 } else {
     if (password_verify($password, $hashed_password)) {
+        $user = new stdClass();
+        $user->id = $userID;
+        $user->user_name = $username;
+        $user->email = $email;
+        $user->first_name = $first_name;
+        $user->last_name = $last_name;
+
         $response['message'] = "logged in";
-        $response['id'] = $id;
-        $response['user_name'] = $username;
-        $response['email'] = $email;
+        $response['user'] = $user;
     } else {
         $response['message'] = "incorrect password";
     }
