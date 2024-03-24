@@ -2,9 +2,9 @@
 include './connection.php';
 
 $userID = $_POST['userID'];
-$bio = $_POST['bio'];
-$summary = $_POST['summary'];
-$profile_img = $_POST['profile_img'];
+$bio = isset($_POST['bio']) ? $_POST['bio'] : '';
+$summary = isset($_POST['summary']) ? $_POST['summary'] : '';
+$profile_img = isset($_POST['profile_img']) ? $_POST['profile_img'] : '';
 
 $query = $mysqli -> prepare('INSERT INTO profiles(userID, bio, summary, profileImg ) VALUES (?,?,?,?)');
 $query -> bind_param('isss', $userID, $bio, $summary, $profile_img);
