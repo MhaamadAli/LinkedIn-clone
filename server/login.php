@@ -5,13 +5,13 @@ include './connection.php';
 $email = $_POST['email'];
 $password = $_POST['password'];
 
-$query = $mysqli ->prepare('SELECT userID,username,first_name,last_name, email, password from users WHERE email=?');
+$query = $mysqli ->prepare('SELECT userID,username, email, password, account_type from users WHERE email=?');
 $query ->bind_param('s', $email);
 
 $query->execute();
 $query->store_result();
 
-$query->bind_result($userID, $username,$first_name,$last_name, $email, $hashed_password);
+$query->bind_result($userID, $username, $email, $hashed_password, $account_type);
 
 $query->fetch();
 
@@ -25,8 +25,7 @@ if ($num_rows == 0) {
         $user->id = $userID;
         $user->user_name = $username;
         $user->email = $email;
-        $user->first_name = $first_name;
-        $user->last_name = $last_name;
+        $user->account_type = $account_type;
 
         $response['message'] = "logged in";
         $response['user'] = $user;
