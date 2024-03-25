@@ -26,7 +26,7 @@ if ($num_rows == 0) {
         $user->user_name = $username;
         $user->email = $email;
         $user->account_type = $account_type;
-
+        $response['status'] = 200;
         $response['message'] = "logged in";
         $response['user'] = $user;
     } else {
