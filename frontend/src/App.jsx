@@ -1,18 +1,15 @@
-import "./styles/utilities.css";
-import "./styles/colors.css";
+import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import Authentication from "./pages/Authentication";
-
+import Login from "./Auth/Login";
+import Signup from "./Auth/Signup";
 function App() {
   return (
-    <div className="app">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/auth" element={<Authentication />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" Component={Login} />
+        <Route path="/signup" Component={Signup} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
