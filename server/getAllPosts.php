@@ -11,10 +11,10 @@ if (!$query->execute()) {
   die("Error fetching posts: " . $query->error);
 }
 
-// Bind result variables (use appropriate data types based on your table)
+
 $query->bind_result($postID, $userID, $companyID, $postContent, $postImage, $postedAt);
 
-// Fetch results and store in allPosts
+
 while ($query->fetch()) {
   $post = [
     "postID" => $postID,

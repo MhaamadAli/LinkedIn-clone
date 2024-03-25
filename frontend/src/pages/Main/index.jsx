@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Header from "./components/Header.jsx";
 import emptyProfile from "../../assets/nouser.jpeg";
 import cover from "../../assets/blank-cover.jpeg";
@@ -13,22 +15,38 @@ import {
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
+
 const Index = () => {
-  const loggedUserString = localStorage.getItem("userdetails");
-  const loggedUser = JSON.parse(loggedUserString);
-  const { id,user_name} = loggedUser;
+  const [posts, setPosts] = useState([]);
+  const loggedUser = JSON.parse(localStorage.getItem("userdetails"));
+  const { id, user_name } = loggedUser;
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const response = await axios.get("http://localhost/linkedin-clone/server/getAllPosts.php");
+        setPosts(response.data.posts);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    }
+
+    fetchPosts();
+  }, []);
+
   return (
     <>
       <Header />
       <div className="main-container">
+        {/* Your existing code for profile card */}
         <div className="column-1">
           <div className="card">
             <div className="cover">
-              <img className="coverImg" srcSet={cover} alt="" />
-              <img className="profileImg" srcSet={emptyProfile} alt="" />
+              <img className="coverImg" src={cover} alt="" />
+              <img className="profileImg" src={emptyProfile} alt="" />
             </div>
             <div className="profile-info">
-              <h2>Welcome , {user_name}</h2>
+              <h2>Welcome, {user_name}</h2>
               <h4>Add a photo</h4>
             </div>
             <hr />
@@ -46,7 +64,7 @@ const Index = () => {
             </div>
             <hr />
             <div className="pro">
-              <h5>Strenghten your profile with an AI writing assistant</h5>
+              <h5>Strengthen your profile with an AI writing assistant</h5>
               <h4>Try Premium for LBP0</h4>
             </div>
             <hr />
@@ -54,15 +72,16 @@ const Index = () => {
               <h5>My Items</h5>
             </div>
           </div>
-          
         </div>
+        
+        {/* Your existing code for column 2 */}
         <div className="column-2">
           <div className="box-1">
             <div className="img">
-              <img srcSet={emptyProfile} alt="" />
+              <img src={emptyProfile} alt="" />
               <input
                 type="text"
-                placeholder="Start a post, try writing with AI "
+                placeholder="Start a post, try writing with AI"
               />
             </div>
             <div className="links">
@@ -82,33 +101,21 @@ const Index = () => {
               </ul>
             </div>
           </div>
-          <div className="seperate"></div>
-          <Post />
+          <div className="separate"></div>
+          {/* Rendering Post component */}
+          {posts.map((post) => (
+            <Post key={post.id} post={post} />
+          ))}
         </div>
+
+        {/* Rendering posts */}
         <div className="column-3">
           <div className="feedCard">
-            <div className="first-section">
-              <h3>Add to your feed</h3>
-              <FontAwesomeIcon icon={faCircleInfo} />
-            </div>
-            <div className="second-section">
-              <div className="box">
-                <img srcSet={emptyProfile} alt="" />
-                <div>
-                  <h4>Name</h4>
-                  <p>title</p>
-                  <button>
-                    <FontAwesomeIcon icon={faPlus} />
-                    Follow
-                  </button>
-                </div>
-              </div>
-              <div className="recommendations ">
-                <button>
-                  View all recommendations
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </button>
-              </div>
+            <h3>All Posts</h3>
+            <div className="posts">
+              {posts.map((post) => (
+                <Post key={post.id} post={post} />
+              ))}
             </div>
           </div>
         </div>

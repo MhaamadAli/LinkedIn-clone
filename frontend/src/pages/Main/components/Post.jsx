@@ -1,3 +1,5 @@
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faComment,
   faEllipsis,
@@ -7,71 +9,64 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import "../styles/post.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
 import emptyProfile from "../../../assets/nouser.jpeg";
-import cover from "../../../assets/blank-cover.jpeg";
-import "../styles/post.css";
 
-const Post = () => {
+const Post = ({ post }) => {
+  const { postID, userName, CompanyName, postContent, postImage, postedAt } = post;
+
   return (
-    <>
-      <div className="post">
-        <div className="first-section">
-          <div>
-            <img srcSet={emptyProfile} alt="" />
-            <div className="post-info">
-              <h4>Name</h4>
-              <h5>Bio</h5>
-              <h5>Time</h5>
-            </div>
-          </div>
-          <div className="buttons">
-            <FontAwesomeIcon icon={faEllipsis} />
-            <FontAwesomeIcon icon={faXmark} />
+    <div className="post">
+      <div className="first-section">
+        <div>
+          <img src={emptyProfile} alt="" />
+          <div className="post-info">
+            <h4>{name}</h4>
+            <h5>{bio}</h5>
+            <h5>{time}</h5>
           </div>
         </div>
-        <div className="second-section">
-          <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe
-            doloribus ipsum maxime
-          </p>
-          <img srcSet={cover} alt="" />
-        </div>
-        <div className="third-section">
-          <div className="likes">
-            <p>
-              <span>
-                <FontAwesomeIcon icon={faThumbsUp} />
-              </span>
-              Karine and 47 others liked your post
-            </p>
-            <p>3 comments</p>
-          </div>
-          <div className="line"></div>
-          <div className="actions">
-            <ul>
-              <li>
-                <FontAwesomeIcon icon={faThumbsUp} />
-                Like
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faComment} />
-                Comment
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faRepeat} />
-                Repost
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faPaperPlane} />
-                Send
-              </li>
-            </ul>
-          </div>
+        <div className="buttons">
+          <FontAwesomeIcon icon={faEllipsis} />
+          <FontAwesomeIcon icon={faXmark} />
         </div>
       </div>
-    </>
+      <div className="second-section">
+        <p>{content}</p>
+        <img src={image} alt="" />
+      </div>
+      <div className="third-section">
+        <div className="likes">
+          <p>
+            <span>
+              <FontAwesomeIcon icon={faThumbsUp} />
+            </span>
+            {likes} others liked your post
+          </p>
+          <p>{comments.length} comments</p>
+        </div>
+        <div className="line"></div>
+        <div className="actions">
+          <ul>
+            <li>
+              <FontAwesomeIcon icon={faThumbsUp} />
+              Like
+            </li>
+            <li>
+              <FontAwesomeIcon icon={faComment} />
+              Comment
+            </li>
+            <li>
+              <FontAwesomeIcon icon={faRepeat} />
+              Repost
+            </li>
+            <li>
+              <FontAwesomeIcon icon={faPaperPlane} />
+              Send
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 };
 
