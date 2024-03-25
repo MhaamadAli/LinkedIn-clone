@@ -24,8 +24,35 @@ const Index = () => {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const response = await axios.get("http://localhost/linkedin-clone/server/getAllPosts.php");
-        setPosts(response.data.posts);
+        const response = await axios.get(
+          "http://localhost/linkedin-clone/server/getAllPosts.php"
+        );
+        if (response?.data) {
+          const postsWithUserInfo = await Promise.all(
+            response.data.map(async (post) => {
+              const userDataFormData = new FormData();
+              userDataFormData.append("userID", post.userID);
+
+              const companyDataFormData = new FormData();
+              companyDataFormData.append("companyID", post.companyID);
+
+              const userDataResponse = await axios.post(
+                "http://localhost/linkedin-clone/server/getUser.php",
+                userDataFormData
+              );
+              const companyDataResponse = await axios.post(
+                "http://localhost/linkedin-clone/server/getCompany.php",
+                companyDataFormData
+              );
+              return {
+                ...post,
+                userName: userDataResponse.data.userName,
+                companyName: companyDataResponse.data.companyName,
+              };
+            })
+          );
+          setPosts(postsWithUserInfo);
+        }
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
@@ -38,7 +65,6 @@ const Index = () => {
     <>
       <Header />
       <div className="main-container">
-        {/* Your existing code for profile card */}
         <div className="column-1">
           <div className="card">
             <div className="cover">
@@ -73,8 +99,6 @@ const Index = () => {
             </div>
           </div>
         </div>
-        
-        {/* Your existing code for column 2 */}
         <div className="column-2">
           <div className="box-1">
             <div className="img">
@@ -102,21 +126,15 @@ const Index = () => {
             </div>
           </div>
           <div className="separate"></div>
-          {/* Rendering Post component */}
-          {posts.map((post) => (
+          {posts?.map((post) => (
             <Post key={post.id} post={post} />
           ))}
         </div>
-
-        {/* Rendering posts */}
         <div className="column-3">
           <div className="feedCard">
-            <h3>All Posts</h3>
-            <div className="posts">
-              {posts.map((post) => (
-                <Post key={post.id} post={post} />
-              ))}
-            </div>
+            <h3>FeedBack</h3>
+
+            <p>write your feedback here if you want to, preferably not </p>
           </div>
         </div>
       </div>

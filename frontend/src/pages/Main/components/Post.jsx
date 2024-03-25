@@ -14,15 +14,16 @@ import emptyProfile from "../../../assets/nouser.jpeg";
 const Post = ({ post }) => {
   const { postID, userName, CompanyName, postContent, postImage, postedAt } = post;
 
+
   return (
     <div className="post">
       <div className="first-section">
         <div>
           <img src={emptyProfile} alt="" />
           <div className="post-info">
-            <h4>{name}</h4>
-            <h5>{bio}</h5>
-            <h5>{time}</h5>
+            <h4>{userName}</h4>
+            <h5>{CompanyName ?? ""}</h5>
+            <h5>{postedAt}</h5>
           </div>
         </div>
         <div className="buttons">
@@ -31,8 +32,8 @@ const Post = ({ post }) => {
         </div>
       </div>
       <div className="second-section">
-        <p>{content}</p>
-        <img src={image} alt="" />
+        <p>{postContent}</p>
+        <img src={postImage} alt="" />
       </div>
       <div className="third-section">
         <div className="likes">
@@ -40,9 +41,9 @@ const Post = ({ post }) => {
             <span>
               <FontAwesomeIcon icon={faThumbsUp} />
             </span>
-            {likes} others liked your post
+            ali and 21 others liked your post
           </p>
-          <p>{comments.length} comments</p>
+          <p>7 comments</p>
         </div>
         <div className="line"></div>
         <div className="actions">

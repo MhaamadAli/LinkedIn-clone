@@ -3,26 +3,26 @@ include './connection.php';
 
 header('Access-Control-Allow-Origin: *');
 
-$userID = $_POST['userID'];
+$companyID = $_POST['companyID'];
 
-$query = $mysqli -> prepare('SELECT userName FROM users WHERE userID= ?');
+$query = $mysqli -> prepare('SELECT companyName FROM companies WHERE companyID= ?');
 
-$query -> bind_param('i', $userID);
+$query -> bind_param('i', $companyID);
 
 $query->execute();
 $query->store_result();
 
-$query -> bind_result($userName);
+$query -> bind_result($companyName);
 
 $query -> fetch();
 
 $num_rows = $query->num_rows();
 
 if ($num_rows == 0) {
-    $response['message'] = "user not found";
+    $response['message'] = "company not found";
 } else {
     $response['status'] = 200;
-    $response['userName'] = $userName;
+    $response['companyName'] = $companyName;
 }
 
 echo json_encode($response);
