@@ -18,48 +18,64 @@ import "./index.css";
 
 const Index = () => {
   const [posts, setPosts] = useState([]);
+  const [newPostContent, setNewPostContent] = useState("");
+  const [newPostImage, setNewPostImage] = useState(null);
   const loggedUser = JSON.parse(localStorage.getItem("userdetails"));
   const { id, user_name } = loggedUser;
 
-  useEffect(() => {
-    async function fetchPosts() {
-      try {
-        const response = await axios.get(
-          "http://localhost/linkedin-clone/server/getAllPosts.php"
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost/linkedin-clone/server/getAllPosts.php"
+      );
+      if (response?.data) {
+        const postsWithUserInfo = await Promise.all(
+          response.data.map(async (post) => {
+            const userDataFormData = new FormData();
+            userDataFormData.append("userID", post.userID);
+
+            const companyDataFormData = new FormData();
+            companyDataFormData.append("companyID", post.companyID);
+
+            const userDataResponse = await axios.post(
+              "http://localhost/linkedin-clone/server/getUser.php",
+              userDataFormData
+            );
+            const companyDataResponse = await axios.post(
+              "http://localhost/linkedin-clone/server/getCompany.php",
+              companyDataFormData
+            );
+            return {
+              ...post,
+              userName: userDataResponse.data.userName,
+              companyName: companyDataResponse.data.companyName,
+            };
+          })
         );
-        if (response?.data) {
-          const postsWithUserInfo = await Promise.all(
-            response.data.map(async (post) => {
-              const userDataFormData = new FormData();
-              userDataFormData.append("userID", post.userID);
-
-              const companyDataFormData = new FormData();
-              companyDataFormData.append("companyID", post.companyID);
-
-              const userDataResponse = await axios.post(
-                "http://localhost/linkedin-clone/server/getUser.php",
-                userDataFormData
-              );
-              const companyDataResponse = await axios.post(
-                "http://localhost/linkedin-clone/server/getCompany.php",
-                companyDataFormData
-              );
-              return {
-                ...post,
-                userName: userDataResponse.data.userName,
-                companyName: companyDataResponse.data.companyName,
-              };
-            })
-          );
-          setPosts(postsWithUserInfo);
-        }
-      } catch (error) {
-        console.error("Error fetching posts:", error);
+        setPosts(postsWithUserInfo);
       }
+    } catch (error) {
+      console.error("Error fetching posts:", error);
     }
+  };
 
+  useEffect(() => {
     fetchPosts();
   }, []);
+
+  const handleNewPostSubmit = async () => {
+    try {
+      const newPostData = new FormData();
+      newPostData.append("userID", id);
+      newPostData.append("content", newPostContent);
+
+      await axios.post("http://localhost/linkedin-clone/server/createPost.php", newPostData);
+
+      fetchPosts();
+    } catch (error) {
+      console.error("Error creating new post:", error);
+    }
+  };
 
   return (
     <>
@@ -106,6 +122,8 @@ const Index = () => {
               <input
                 type="text"
                 placeholder="Start a post, try writing with AI"
+                value={newPostContent}
+                onChange={(e) => setNewPostContent(e.target.value)}
               />
             </div>
             <div className="links">
@@ -118,9 +136,9 @@ const Index = () => {
                   <FontAwesomeIcon className="event" icon={faCalendarDays} />
                   Events
                 </li>
-                <li>
+                <li onClick={handleNewPostSubmit}>
                   <FontAwesomeIcon className="article" icon={faNewspaper} />
-                  Write article
+                  <button onClick={handleNewPostSubmit}>Write post</button>
                 </li>
               </ul>
             </div>
@@ -133,7 +151,6 @@ const Index = () => {
         <div className="column-3">
           <div className="feedCard">
             <h3>FeedBack</h3>
-
             <p>write your feedback here if you want to, preferably not </p>
           </div>
         </div>
