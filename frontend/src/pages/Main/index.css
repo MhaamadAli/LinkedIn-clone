@@ -36,6 +36,10 @@
   left: 50%;
   transform: translateX(-50%);
 }
+
+.margin-1 {
+  margin-top: 15px;
+}
 .main-container .column-1 .card .profile-info {
   margin-top: 20px;
   padding: 15px;

@@ -143,6 +143,29 @@ const Index = () => {
               </ul>
             </div>
           </div>
+          <div className="box-1 margin-1">
+            <div className="img">
+              <img src={emptyProfile} alt="" />
+              <input
+                type="text"
+                placeholder="create a job listing"
+                value={newPostContent}
+                onChange={(e) => setNewPostContent(e.target.value)}
+              />
+            </div>
+            <div className="links">
+              <ul>
+                <li>               
+                </li>
+                <li>
+                </li>
+                <li onClick={handleNewPostSubmit}>
+                  <FontAwesomeIcon className="article" icon={faNewspaper} />
+                  <button onClick={handleNewPostSubmit}>create Job</button>
+                </li>
+              </ul>
+            </div>
+          </div>
           <div className="separate"></div>
           {posts?.map((post) => (
             <Post key={post.id} post={post} />
